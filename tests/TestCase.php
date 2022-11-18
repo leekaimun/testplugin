@@ -1,12 +1,18 @@
 <?php
 
-namespace VendorName\Skeleton\Tests;
+namespace Lkm\Testplugin\Tests;
 
+use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
+use BladeUI\Icons\BladeIconsServiceProvider;
 use Filament\FilamentServiceProvider;
+use Filament\Forms\FormsServiceProvider;
+use Filament\Support\SupportServiceProvider;
+use Filament\Tables\TablesServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
-use VendorName\Skeleton\SkeletonServiceProvider;
+use Lkm\Testplugin\TestpluginServiceProvider;
+use Lkm\Testplugin\Tests\User;
 
 class TestCase extends Orchestra
 {
@@ -14,8 +20,10 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
+        config(['auth.providers.users.model' => User::class]);
+
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'VendorName\\Skeleton\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'Lkm\\Testplugin\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 
@@ -24,7 +32,12 @@ class TestCase extends Orchestra
         return [
             LivewireServiceProvider::class,
             FilamentServiceProvider::class,
-            SkeletonServiceProvider::class,
+            TestpluginServiceProvider::class,
+            FormsServiceProvider::class,
+            SupportServiceProvider::class,
+            BladeHeroiconsServiceProvider::class,
+            BladeIconsServiceProvider::class,
+            TablesServiceProvider::class,
         ];
     }
 
@@ -32,9 +45,12 @@ class TestCase extends Orchestra
     {
         config()->set('database.default', 'testing');
 
-        /*
-        $migration = include __DIR__.'/../database/migrations/create_skeleton_table.php.stub';
+        $migration = include __DIR__.'/../database/migrations/create_items_table.php';
         $migration->up();
-        */
+    }
+
+    protected function defineDatabaseMigrations()
+    {
+        $this->loadLaravelMigrations();
     }
 }

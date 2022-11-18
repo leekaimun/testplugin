@@ -8,10 +8,10 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('skeleton_table', function (Blueprint $table) {
+        Schema::create('items', function (Blueprint $table) {
             $table->id();
 
-            // add fields
+            $table->string('name');
 
             $table->timestamps();
         });
