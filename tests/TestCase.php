@@ -12,15 +12,12 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Lkm\Testplugin\TestpluginServiceProvider;
-use Lkm\Testplugin\Tests\User;
 
 class TestCase extends Orchestra
 {
     protected function setUp(): void
     {
         parent::setUp();
-
-        config(['auth.providers.users.model' => User::class]);
 
         Factory::guessFactoryNamesUsing(
             fn (string $modelName) => 'Lkm\\Testplugin\\Database\\Factories\\'.class_basename($modelName).'Factory'
@@ -47,10 +44,5 @@ class TestCase extends Orchestra
 
         $migration = include __DIR__.'/../database/migrations/create_items_table.php';
         $migration->up();
-    }
-
-    protected function defineDatabaseMigrations()
-    {
-        $this->loadLaravelMigrations();
     }
 }
